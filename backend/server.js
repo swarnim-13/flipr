@@ -5,7 +5,7 @@ const cors = require('cors');
 const path = require('path');
 
 const authRouter = require('./Routes/auth');
-const offeringsRouter = require('./routes/offerings');
+const offeringsRouter = require('./Routes/offerings');
 const newsletterRouter = require('./Routes/newsletter');
 
 const app = express();
