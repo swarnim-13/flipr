@@ -32,7 +32,13 @@ export default function App() {
             <Link to="/" className="px-4">
               Investment Opportunities
             </Link>
-
+            <Link to="/" className="px-4">
+              How it Works
+            </Link>
+<Link to="/" className="px-4">
+              About us
+            </Link>
+        
             {!token && (
               <>
                 {/* Login */}

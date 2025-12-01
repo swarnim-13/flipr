@@ -11,18 +11,20 @@ h1,h2,h3 { font-weight: 700; }
 /* load a friendly geometric font from Google */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
 
-:root{
-  --accent-green: #0f8b73;
-  --accent-pink: #ff9cb0;
-  --hero-text: #ffffff;
+
+:root {
+  --brand-green: #0f8b73;
+  --brand-pink: #ff93a2;
 }
 
 /* global font */
-body {
-  font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
+html,body,#root { height: 100%; font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+
+.font-display { font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto; }
+
 
 /* hero background sizing helper */
+h1 { font-weight: 800; }
 .hero-bg {
   background-position: center center;
   background-size: cover;
@@ -97,6 +99,15 @@ body {
   transform: translateY(-3px);
   background-color: #0e7a63;
 }
+/* Footer tweaks */
+footer img { display: block; }
+footer input::placeholder { color: #9ca3af; }
+
+/* Footer styles (small tweaks to match reference) */
+.bg-[f3f3f3] { background-color: #f3f3f3; }
+button.bg-pink-400 { background-color: #ff8fb1; }
+button.bg-pink-400:hover { background-color: #ff78a0; }
+
 
 /* small visual polish so text appears centered vertically with same spacing as reference */
 @media (min-width: 1024px) {
