@@ -1,4 +1,3 @@
-// entry point
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -12,6 +11,7 @@ const newsletterRouter = require('./Routes/newsletter');
 const app = express();
 app.use(cors());
 app.use(express.json());
+// serve uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // routes
@@ -26,7 +26,6 @@ async function start() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('MongoDB connected');
 
-    // optional seeding of admin (if run with --seed)
     if (process.argv.includes('--seed')) {
       const User = require('./models/User');
       const bcrypt = require('bcryptjs');
@@ -45,7 +44,7 @@ async function start() {
 
     app.listen(PORT, () => console.log(`Server running ${PORT}`));
   } catch (err) {
-    console.error(err);
+    console.error('Failed to start server:', err.message || err);
     process.exit(1);
   }
 }

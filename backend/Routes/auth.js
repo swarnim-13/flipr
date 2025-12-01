@@ -1,20 +1,66 @@
+// backend/routes/auth.js
 const express = require('express');
-const router = express.Router();
-const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const router = express.Router();
 
-// POST /api/auth/login
+// CREATE ACCOUNT / REGISTER
+router.post('/register', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password)
+      return res.status(400).json({ message: 'Email & Password required' });
+
+    const exists = await User.findOne({ email });
+    if (exists)
+      return res.status(400).json({ message: 'User already exists' });
+
+    const hashed = await bcrypt.hash(password, 10);
+
+    await User.create({
+      email,
+      password: hashed,
+      role: 'admin'
+    });
+
+    res.json({ message: 'Account created successfully. Please login.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// LOGIN
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+  try {
+    const { email, password } = req.body;
 
-  const ok = await bcrypt.compare(password, user.password);
-  if (!ok) return res.status(400).json({ message: 'Invalid credentials' });
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(400).json({ message: 'Invalid email or password' });
 
-  const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
-  res.json({ token, email: user.email });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match)
+      return res.status(400).json({ message: 'Invalid password' });
+
+    const token = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token,
+      email: user.email,
+      role: user.role
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 module.exports = router;
